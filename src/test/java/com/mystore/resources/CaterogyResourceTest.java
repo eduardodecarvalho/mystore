@@ -28,7 +28,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
         final String expected = "[\n" +
                 "   {\n" +
                 "      \"id\":1,\n" +
-                "      \"name\":\"All\"\n" +
+                "      \"name\":\"Grocery & Gourmet Foods\"\n" +
                 "   },\n" +
                 "   {\n" +
                 "      \"id\":2,\n" +
@@ -57,12 +57,8 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
                 "   {\n" +
                 "      \"id\":8,\n" +
                 "      \"name\":\"Consumer Electronics\"\n" +
-                "   },\n" +
-                "   {\n" +
-                "      \"id\":9,\n" +
-                "      \"name\":\"Grocery & Gourmet Foods\"\n" +
-                "   }\n" +
-                "]";
+                "   }"
+                + " ]";
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
     }
 
@@ -71,7 +67,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/categories/1", String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        final String expected = "{\"id\":1,\"name\":\"All\"}";
+        final String expected = "{\"id\":1,\"name\":\"Grocery & Gourmet Foods\"}";
 
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
     }

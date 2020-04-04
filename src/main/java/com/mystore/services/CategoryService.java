@@ -27,7 +27,7 @@ public class CategoryService {
 
     public Integer create(final Category category) {
         if (StringUtils.isBlank(category.getName())) {
-            throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_NAME_SHOULD_HAVE_A_NAME);
+            throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_SHOULD_HAVE_A_NAME);
         }
         if (categoryRepository.findByName(category.getName()).isPresent()) {
             throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_NAME_ALREDY_REGISTERED);
