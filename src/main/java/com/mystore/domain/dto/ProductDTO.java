@@ -9,6 +9,7 @@ public class ProductDTO {
     private String sku;
     private String name;
     private String description;
+    private String model;
     private BigDecimal price;
     private Long quantity;
 
@@ -68,6 +69,14 @@ public class ProductDTO {
 
     public void setCategories(final List<CategoryDTO> categories) {
         this.categories = categories;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(final String model) {
+        this.model = model;
     }
 
 }

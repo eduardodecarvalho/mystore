@@ -25,7 +25,42 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products", String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        final String expected = "[]";
+        final String expected = "[\n" +
+                "   {\n" +
+                "      \"id\":1,\n" +
+                "      \"sku\":\"NB2020I7DELL\",\n" +
+                "      \"name\":\"Notebook\",\n" +
+                "      \"description\":\"Notebook Dell i7 2020\",\n" +
+                "      \"model\":\"Dell Inspiron 15 5000\",\n" +
+                "      \"price\":2000.00,\n" +
+                "      \"quantity\":10,\n" +
+                "      \"categories\":[\n" +
+                "         {\n" +
+                "            \"id\":8,\n" +
+                "            \"name\":\"Consumer Electronics\"\n" +
+                "         }\n" +
+                "      ]\n" +
+                "   },\n" +
+                "   {\n" +
+                "      \"id\":2,\n" +
+                "      \"sku\":\"ER2020PWAAMZON\",\n" +
+                "      \"name\":\"Kindle\",\n" +
+                "      \"description\":\"E-Reader Amazon Kindle Papperwhite\",\n" +
+                "      \"model\":\"Paperwhite 10a 8gb\",\n" +
+                "      \"price\":150.31,\n" +
+                "      \"quantity\":40,\n" +
+                "      \"categories\":[\n" +
+                "         {\n" +
+                "            \"id\":5,\n" +
+                "            \"name\":\"Books\"\n" +
+                "         },\n" +
+                "         {\n" +
+                "            \"id\":8,\n" +
+                "            \"name\":\"Consumer Electronics\"\n" +
+                "         }\n" +
+                "      ]\n" +
+                "   }\n" +
+                "]";
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
     }
 
@@ -34,7 +69,21 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/1", String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        final String expected = "{\"id\":1,\"name\":\"All\"}";
+        final String expected = "   {\n" +
+                "      \"id\":1,\n" +
+                "      \"sku\":\"NB2020I7DELL\",\n" +
+                "      \"name\":\"Notebook\",\n" +
+                "      \"description\":\"Notebook Dell i7 2020\",\n" +
+                "      \"model\":\"Dell Inspiron 15 5000\",\n" +
+                "      \"price\":2000.00,\n" +
+                "      \"quantity\":10,\n" +
+                "      \"categories\":[\n" +
+                "         {\n" +
+                "            \"id\":8,\n" +
+                "            \"name\":\"Consumer Electronics\"\n" +
+                "         }\n" +
+                "      ]\n" +
+                "   }\n";
 
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
     }
@@ -48,7 +97,11 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     @Test
     void create() throws Exception {
         final String productDTOString = "{" +
-                "    \"name\": \"IOT\"" +
+                "    \"name\": \"IOT\"," +
+                "    \"sku\": \"IOT\"," +
+                "    \"description\": \"IOT\"," +
+                "    \"model\": \"IOT\"," +
+                "    \"price\": 10.0" +
                 "} ";
 
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
@@ -63,8 +116,12 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     @Test
     void createWithNameWithJustSpacesShouldReturnError() throws Exception {
         final String productDTOString = "{" +
-                "    \"name\": \"     \""
-                + "} ";
+                "    \"name\": \"     \"," +
+                "    \"sku\": \"IOT\"," +
+                "    \"description\": \"IOT\"," +
+                "    \"model\": \"IOT\"," +
+                "    \"price\": 10.0" +
+                "} ";
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -73,7 +130,11 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     @Test
     void createWithDuplicatedNameShouldReturnError() throws Exception {
         final String productDTOString = "{" +
-                "      \"name\":\"Automotive       \"\n" +
+                "    \"name\": \"Kindle\"," +
+                "    \"sku\": \"IOT\"," +
+                "    \"description\": \"IOT\"," +
+                "    \"model\": \"IOT\"," +
+                "    \"price\": 10.0" +
                 "} ";
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
@@ -85,7 +146,42 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/categories/8", String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        final String expected = "{\"id\":1,\"name\":\"All\"}";
+        final String expected = "[\n" +
+                "   {\n" +
+                "      \"id\":1,\n" +
+                "      \"sku\":\"NB2020I7DELL\",\n" +
+                "      \"name\":\"Notebook\",\n" +
+                "      \"description\":\"Notebook Dell i7 2020\",\n" +
+                "      \"model\":\"Dell Inspiron 15 5000\",\n" +
+                "      \"price\":2000.00,\n" +
+                "      \"quantity\":10,\n" +
+                "      \"categories\":[\n" +
+                "         {\n" +
+                "            \"id\":8,\n" +
+                "            \"name\":\"Consumer Electronics\"\n" +
+                "         }\n" +
+                "      ]\n" +
+                "   },\n" +
+                "   {\n" +
+                "      \"id\":2,\n" +
+                "      \"sku\":\"ER2020PWAAMZON\",\n" +
+                "      \"name\":\"Kindle\",\n" +
+                "      \"description\":\"E-Reader Amazon Kindle Papperwhite\",\n" +
+                "      \"model\":\"Paperwhite 10a 8gb\",\n" +
+                "      \"price\":150.31,\n" +
+                "      \"quantity\":40,\n" +
+                "      \"categories\":[\n" +
+                "         {\n" +
+                "            \"id\":5,\n" +
+                "            \"name\":\"Books\"\n" +
+                "         },\n" +
+                "         {\n" +
+                "            \"id\":8,\n" +
+                "            \"name\":\"Consumer Electronics\"\n" +
+                "         }\n" +
+                "      ]\n" +
+                "   }\n" +
+                "]";
 
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
     }

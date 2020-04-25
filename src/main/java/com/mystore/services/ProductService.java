@@ -2,6 +2,7 @@ package com.mystore.services;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class ProductService {
     }
 
     public Integer create(final Product product) {
+        if (StringUtils.isBlank(product.getName())) {
+            throw new MyStoreBusinessException(MyStoreBusinessException.PRODUCT_SHOULD_HAVE_A_NAME);
+        }
         if (productRepository.findByName(product.getName()).isPresent()) {
             throw new MyStoreBusinessException(MyStoreBusinessException.PRODUCT_NAME_ALREDY_REGISTERED);
         }
