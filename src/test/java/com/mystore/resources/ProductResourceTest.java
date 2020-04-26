@@ -1,9 +1,12 @@
 package com.mystore.resources;
 
+import static org.junit.Assert.assertFalse;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -59,8 +62,21 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
                 "            \"name\":\"Consumer Electronics\"\n" +
                 "         }\n" +
                 "      ]\n" +
+                "   },\n" +
+                "   {\n" +
+                "      \"id\":3,\n" +
+                "      \"sku\":\"TV2020SMARTSAMSUNG\",\n" +
+                "      \"name\":\"Smart TV 4K Led 50pol\",\n" +
+                "      \"description\":\"Wi-Fi Bluetooth HDR 3 HDMI 2 USB\",\n" +
+                "      \"model\":\"UN50RU7100\",\n" +
+                "      \"price\":1999.05,\n" +
+                "      \"quantity\":0,\n" +
+                "      \"categories\":[\n" +
+                "\n" +
+                "      ]\n" +
                 "   }\n" +
                 "]";
+
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
     }
 
@@ -184,5 +200,22 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
                 "]";
 
         JSONAssert.assertEquals(expected, responseEntity.getBody(), true);
+    }
+
+    @Test
+    void deleteById() {
+        final Integer idToDelete = 3;
+        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/products/" + idToDelete, HttpMethod.DELETE, null,
+                String.class);
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertFalse(productRepository.findById(idToDelete).isPresent());
+    }
+
+    @Test
+    void deleteByIdWithQuantityShouldReturnError() {
+        final Integer idToDelete = 1;
+        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/products/" + idToDelete, HttpMethod.DELETE, null,
+                String.class);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 }

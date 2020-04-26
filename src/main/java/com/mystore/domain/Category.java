@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "CATEGORY")
 public class Category {
@@ -43,6 +45,7 @@ public class Category {
         this.name = name.trim();
     }
 
+    @JsonManagedReference
     @ManyToMany(mappedBy = "categories")
     public List<Product> getProducts() {
         return products;

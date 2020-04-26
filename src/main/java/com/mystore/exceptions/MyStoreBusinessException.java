@@ -10,12 +10,14 @@ public class MyStoreBusinessException extends RuntimeException {
     public static final String CATEGORY_NOT_FOUND = "category_not_found";
     public static final String CATEGORY_NAME_ALREDY_REGISTERED = "category_name_alredy_registered";
     public static final String CATEGORY_SHOULD_HAVE_A_NAME = "category_should_have_a_name";
+    public static final String CATEGORY_WITH_PRODUCTS = "category_with_products";
 
     public static final String PRODUCT_NOT_FOUND = "product_not_found";
     public static final String PRODUCT_SHOULD_HAVE_A_NAME = "product_should_have_a_name";
     public static final String PRODUCT_NAME_ALREDY_REGISTERED = "product_name_alredy_registered";
     public static final String PRODUCT_MODEL_ALREDY_REGISTERED = "product_model_alredy_registered";
     public static final String PRODUCT_SHOULD_HAVE_A_MODEL = "product_should_have_a_model";
+    public static final String PRODUCT_HAVE_QUANTITY = "product_have_quantity";
 
     public MyStoreBusinessException(final String msg) {
         super(msg);

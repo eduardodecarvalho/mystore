@@ -35,4 +35,13 @@ public class CategoryService {
         return categoryRepository.save(category).getId();
     }
 
+    public void delete(final Integer id) {
+        final Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_NOT_FOUND));
+        if (!category.getProducts().isEmpty()) {
+            throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_WITH_PRODUCTS);
+        }
+        categoryRepository.delete(category);
+    }
+
 }

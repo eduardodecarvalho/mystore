@@ -13,6 +13,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "PRODUCT")
 public class Product {
@@ -97,6 +99,7 @@ public class Product {
     }
 
     @ManyToMany
+    @JsonBackReference
     @JoinTable(name = "ASSOC_CATEGORY_PRODUCT", joinColumns = @JoinColumn(name = "id_product"), inverseJoinColumns = @JoinColumn(name = "id_category"))
     public List<Category> getCategories() {
         return categories;

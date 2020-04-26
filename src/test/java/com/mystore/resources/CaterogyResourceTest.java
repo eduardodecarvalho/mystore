@@ -1,9 +1,12 @@
 package com.mystore.resources;
 
+import static org.junit.Assert.assertFalse;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -11,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mystore.domain.Category;
-import com.mystore.domain.dto.CategoryDTO;
+import com.mystore.domain.dto.CategoryNameDTO;
 import com.mystore.repositories.CaterogyRepository;
 import com.mystore.utils.SpringBootIntegrationTest;
 
@@ -84,7 +87,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
                 "    \"name\": \"IOT\"" +
                 "} ";
 
-        final CategoryDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryDTO.class);
+        final CategoryNameDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryNameDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/categories", categoryDTO, String.class);
         Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
@@ -98,7 +101,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
         final String categoryDTOString = "{" +
                 "    \"name\": \"     \""
                 + "} ";
-        final CategoryDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryDTO.class);
+        final CategoryNameDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryNameDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/categories", categoryDTO, String.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
@@ -108,9 +111,25 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
         final String categoryDTOString = "{" +
                 "      \"name\":\"Automotive       \"\n" +
                 "} ";
-        final CategoryDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryDTO.class);
+        final CategoryNameDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryNameDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/categories", categoryDTO, String.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
+    @Test
+    void deleteById() {
+        final Integer idToDelete = 1;
+        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/categories/" + idToDelete, HttpMethod.DELETE, null,
+                String.class);
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertFalse(categoryRepository.findById(idToDelete).isPresent());
+    }
+
+    @Test
+    void deleteByIdWithProductsShouldReturnError() {
+        final Integer idToDelete = 8;
+        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/categories/" + idToDelete, HttpMethod.DELETE, null,
+                String.class);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
 }

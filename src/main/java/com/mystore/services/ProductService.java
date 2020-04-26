@@ -42,4 +42,13 @@ public class ProductService {
     public List<Product> findByCategory(final Integer categoryId) {
         return productRepository.findByCategoriesId(categoryId);
     }
+
+    public void delete(final Integer id) {
+        final Product product = productRepository.findById(id)
+                .orElseThrow(() -> new MyStoreBusinessException(MyStoreBusinessException.PRODUCT_NOT_FOUND));
+        if (product.getQuantity() > 0) {
+            throw new MyStoreBusinessException(MyStoreBusinessException.PRODUCT_HAVE_QUANTITY);
+        }
+        productRepository.delete(product);
+    }
 }

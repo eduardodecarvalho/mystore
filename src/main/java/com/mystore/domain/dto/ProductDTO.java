@@ -1,9 +1,12 @@
 package com.mystore.domain.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ProductDTO {
+public class ProductDTO implements Serializable {
+
+    private static final long serialVersionUID = -6864846849782828445L;
 
     private Integer id;
     private String sku;
@@ -13,7 +16,7 @@ public class ProductDTO {
     private BigDecimal price;
     private Long quantity;
 
-    private List<CategoryDTO> categories;
+    private List<CategoryNameDTO> categories;
 
     public Integer getId() {
         return id;
@@ -63,11 +66,11 @@ public class ProductDTO {
         this.quantity = quantity;
     }
 
-    public List<CategoryDTO> getCategories() {
+    public List<CategoryNameDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(final List<CategoryDTO> categories) {
+    public void setCategories(final List<CategoryNameDTO> categories) {
         this.categories = categories;
     }
 
