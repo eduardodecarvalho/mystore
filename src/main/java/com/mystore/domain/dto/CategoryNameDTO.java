@@ -1,16 +1,13 @@
 package com.mystore.domain.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class CategoryDTO implements Serializable {
+public class CategoryNameDTO implements Serializable {
 
-    private static final long serialVersionUID = -6611242501590194784L;
+    private static final long serialVersionUID = -3730333380727565343L;
 
     private Integer id;
     private String name;
-
-    private List<ProductDTO> products;
 
     public Integer getId() {
         return id;
@@ -26,14 +23,6 @@ public class CategoryDTO implements Serializable {
 
     public void setName(final String name) {
         this.name = name;
-    }
-
-    public List<ProductDTO> getProducts() {
-        return products;
-    }
-
-    public void setProducts(final List<ProductDTO> products) {
-        this.products = products;
     }
 
 }

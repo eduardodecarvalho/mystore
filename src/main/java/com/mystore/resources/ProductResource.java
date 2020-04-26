@@ -15,37 +15,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mystore.domain.Category;
-import com.mystore.domain.dto.CategoryNameDTO;
-import com.mystore.services.CategoryService;
+import com.mystore.domain.Product;
+import com.mystore.domain.dto.ProductDTO;
+import com.mystore.services.ProductService;
 
 @RestController
-@RequestMapping(value = "/categories")
-public class CaterogyResource {
+@RequestMapping(value = "/products")
+public class ProductResource {
 
     @Autowired
-    private CategoryService categoryService;
+    private ProductService productService;
 
     final ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping
-    public List<CategoryNameDTO> findAll() {
-        return categoryService.findAll().stream().map(c -> modelMapper.map(c, CategoryNameDTO.class)).collect(Collectors.toList());
+    public List<ProductDTO> findAll() {
+        return productService.findAll().stream().map(c -> modelMapper.map(c, ProductDTO.class)).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public CategoryNameDTO findById(@PathVariable final Integer id) {
-        return modelMapper.map(categoryService.findById(id), CategoryNameDTO.class);
+    public ProductDTO findById(@PathVariable final Integer id) {
+        return modelMapper.map(productService.findById(id), ProductDTO.class);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer create(@RequestBody final CategoryNameDTO categoryDTO) {
-        return categoryService.create(modelMapper.map(categoryDTO, Category.class));
+    public Integer create(@RequestBody final ProductDTO productDTO) {
+        return productService.create(modelMapper.map(productDTO, Product.class));
+    }
+
+    @GetMapping("categories/{categoryId}")
+    public List<ProductDTO> findByCategory(@PathVariable final Integer categoryId) {
+        return productService.findByCategory(categoryId).stream().map(c -> modelMapper.map(c, ProductDTO.class)).collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable final Integer id) {
-        categoryService.delete(id);
+        productService.delete(id);
     }
 }
