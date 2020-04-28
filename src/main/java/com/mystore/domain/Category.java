@@ -17,6 +17,7 @@ public class Category {
 
     private Integer id;
     private String name;
+
     private List<Product> products;
 
     public Category() {
