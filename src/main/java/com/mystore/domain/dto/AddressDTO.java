@@ -1,79 +1,89 @@
 package com.mystore.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mystore.domain.Address;
+import com.mystore.domain.City;
+import com.mystore.domain.Client;
+
 public class AddressDTO {
 
-    private Integer id;
-    private String street;
-    private String number;
-    private String neighborhood;
-    private String zipCode;
-    private String complement;
+    private Address address;
 
-    private ClientDTO client;
-    private CityDTO city;
+    public AddressDTO(Address address) {
+        this.address = address;
+    }
+
+    @JsonIgnore
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(final Address address) {
+        this.address = address;
+    }
 
     public Integer getId() {
-        return id;
+        return address.getId();
     }
 
     public void setId(final Integer id) {
-        this.id = id;
+        address.setId(id);
     }
 
     public String getStreet() {
-        return street;
+        return address.getStreet();
     }
 
     public void setStreet(final String street) {
-        this.street = street;
+        address.setStreet(street);
     }
 
     public String getNumber() {
-        return number;
+        return address.getNumber();
     }
 
     public void setNumber(final String number) {
-        this.number = number;
+        address.setNumber(number);
     }
 
     public String getNeighborhood() {
-        return neighborhood;
+        return address.getNeighborhood();
     }
 
     public void setNeighborhood(final String neighborhood) {
-        this.neighborhood = neighborhood;
+        address.setNeighborhood(neighborhood);
     }
 
     public String getZipCode() {
-        return zipCode;
+        return address.getZipCode();
     }
 
     public void setZipCode(final String zipCode) {
-        this.zipCode = zipCode;
+        address.setZipCode(zipCode);
     }
 
     public String getComplement() {
-        return complement;
+        return address.getComplement();
     }
 
     public void setComplement(final String complement) {
-        this.complement = complement;
+        address.setComplement(complement);
     }
 
-    public ClientDTO getClient() {
-        return client;
+    public Client getClient() {
+        return address.getClient();
     }
 
-    public void setClient(final ClientDTO client) {
-        this.client = client;
+    public void setClient(final Client client) {
+        address.setClient(client);
     }
 
-    public CityDTO getCity() {
-        return city;
+    public City getCity() {
+        return address.getCity();
     }
 
-    public void setCity(final CityDTO city) {
-        this.city = city;
+    public void setCity(final City city) {
+        address.setCity(city);
     }
 
 }

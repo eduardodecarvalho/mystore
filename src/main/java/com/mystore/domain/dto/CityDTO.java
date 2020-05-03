@@ -1,23 +1,24 @@
 package com.mystore.domain.dto;
 
+import com.mystore.domain.City;
+
 public class CityDTO {
 
-    private Integer id;
-    private String name;
+    private City city;
 
     public Integer getId() {
-        return id;
+        return city.getId();
     }
 
     public void setId(final Integer id) {
-        this.id = id;
+        city.setId(id);
     }
 
     public String getName() {
-        return name;
+        return city.getName();
     }
 
     public void setName(final String name) {
-        this.name = name;
+        city.setName(name);
     }
 }

@@ -29,7 +29,8 @@ public class ProductService {
         if (StringUtils.isBlank(product.getName())) {
             throw new MyStoreBusinessException(MyStoreBusinessException.PRODUCT_SHOULD_HAVE_A_NAME);
         }
-        if (productRepository.findByName(product.getName()).isPresent()) {
+
+        if (productRepository.existsByName(product.getName())) {
             throw new MyStoreBusinessException(MyStoreBusinessException.PRODUCT_NAME_ALREDY_REGISTERED);
         }
         if (productRepository.findByModel(product.getName()).isPresent()) {

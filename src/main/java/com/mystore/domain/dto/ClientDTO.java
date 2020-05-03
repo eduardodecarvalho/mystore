@@ -1,74 +1,90 @@
 package com.mystore.domain.dto;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mystore.domain.Client;
 import com.mystore.domain.enums.ClientType;
 
 public class ClientDTO {
 
-    private Integer id;
-    private String name;
-    private String email;
-    private String nationalRegister;
-    private ClientType clientType;
+    private Client client;
 
-    private List<AddressDTO> addresses;
-    private List<ClientPhoneDTO> phones;
+    public ClientDTO() {
+        client = new Client();
+    }
+
+    public ClientDTO(final Client client) {
+        this.client = client;
+    }
+
+    @JsonIgnore
+    public Client getClient() {
+        return client;
+    }
 
     public Integer getId() {
-        return id;
+        return client.getId();
     }
 
     public void setId(final Integer id) {
-        this.id = id;
+        client.setId(id);
     }
 
     public String getName() {
-        return name;
+        return client.getName();
     }
 
     public void setName(final String name) {
-        this.name = name;
+        client.setName(name);
     }
 
     public String getEmail() {
-        return email;
+        return client.getEmail();
     }
 
     public void setEmail(final String email) {
-        this.email = email;
+        client.setEmail(email);
     }
 
     public String getNationalRegister() {
-        return nationalRegister;
+        return client.getNationalRegister();
     }
 
     public void setNationalRegister(final String nationalRegister) {
-        this.nationalRegister = nationalRegister;
+        client.setNationalRegister(nationalRegister);
     }
 
     public ClientType getClientType() {
-        return clientType;
+        return client.getClientType();
     }
 
     public void setClientType(final ClientType clientType) {
-        this.clientType = clientType;
+        client.setClientType(clientType);
     }
 
     public List<AddressDTO> getAddresses() {
-        return addresses;
+        if (client.getAddresses() == null) {
+            return Collections.emptyList();
+        }
+        return client.getAddresses().stream().map(AddressDTO::new).collect(Collectors.toList());
     }
 
-    public void setAddresses(final List<AddressDTO> addresses) {
-        this.addresses = addresses;
+    public void setAddresses(final List<AddressDTO> addressesDTO) {
+        client.setAddresses(addressesDTO.stream().map(AddressDTO::getAddress).collect(Collectors.toList()));
     }
 
-    public List<ClientPhoneDTO> getPhones() {
-        return phones;
+    public Set<ClientPhoneDTO> getPhones() {
+        if (client.getPhones() == null) {
+            return Collections.emptySet();
+        }
+        return client.getPhones().stream().map(ClientPhoneDTO::new).collect(Collectors.toSet());
     }
 
-    public void setPhones(final List<ClientPhoneDTO> phones) {
-        this.phones = phones;
+    public void setPhones(final Set<ClientPhoneDTO> phones) {
+        client.setPhones(phones.stream().map(ClientPhoneDTO::getClientPhone).collect(Collectors.toSet()));
     }
-
 }

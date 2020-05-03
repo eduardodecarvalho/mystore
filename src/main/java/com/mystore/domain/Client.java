@@ -1,6 +1,8 @@
 package com.mystore.domain;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mystore.domain.enums.ClientType;
 
 @Entity
 @Table(name = "CLIENT")
-public class Client {
+public class Client implements Serializable {
+
+    private static final long serialVersionUID = 7933842952292858061L;
 
     private Integer id;
     private String name;
@@ -22,7 +27,20 @@ public class Client {
     private ClientType clientType;
 
     private List<Address> addresses;
-    private List<ClientPhone> phones;
+    private Set<ClientPhone> phones;
+
+    public Client() {
+    }
+
+    public Client(final Client client) {
+        this.id = client.getId();
+        this.name = client.getName();
+        this.email = client.getEmail();
+        this.nationalRegister = client.getNationalRegister();
+        this.clientType = client.getClientType();
+        this.addresses = client.getAddresses();
+        this.phones = client.getPhones();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +84,7 @@ public class Client {
         this.clientType = clientType;
     }
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "client")
     public List<Address> getAddresses() {
         return addresses;
@@ -75,12 +94,13 @@ public class Client {
         this.addresses = addresses;
     }
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "client")
-    public List<ClientPhone> getPhones() {
+    public Set<ClientPhone> getPhones() {
         return phones;
     }
 
-    public void setPhones(final List<ClientPhone> phones) {
+    public void setPhones(final Set<ClientPhone> phones) {
         this.phones = phones;
     }
 
