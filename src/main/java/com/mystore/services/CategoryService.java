@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 import com.mystore.domain.Category;
 import com.mystore.exceptions.MyStoreBusinessException;
 import com.mystore.repositories.CaterogyRepository;
+import com.mystore.repositories.ProductRepository;
 
 @Service
 public class CategoryService {
 
     @Autowired
     private CaterogyRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Category> findAll() {
         return categoryRepository.findAll();
@@ -29,16 +33,16 @@ public class CategoryService {
         if (StringUtils.isBlank(category.getName())) {
             throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_SHOULD_HAVE_A_NAME);
         }
-        if (categoryRepository.findByName(category.getName()).isPresent()) {
+        if (categoryRepository.existsByName(category.getName())) {
             throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_NAME_ALREDY_REGISTERED);
         }
         return categoryRepository.save(category).getId();
     }
 
     public void delete(final Integer id) {
-        final Category category = categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_NOT_FOUND));
-        if (!category.getProducts().isEmpty()) {
+        if (productRepository.existsByCategoriesId(id)) {
             throw new MyStoreBusinessException(MyStoreBusinessException.CATEGORY_WITH_PRODUCTS);
         }
         categoryRepository.delete(category);

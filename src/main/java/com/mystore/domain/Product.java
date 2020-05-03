@@ -1,5 +1,6 @@
 package com.mystore.domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,11 +14,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "PRODUCT")
-public class Product {
+public class Product implements Serializable {
+
+    private static final long serialVersionUID = -1358852398468835303L;
 
     private Integer id;
     @NotNull
@@ -99,7 +100,6 @@ public class Product {
     }
 
     @ManyToMany
-    @JsonBackReference
     @JoinTable(name = "ASSOC_CATEGORY_PRODUCT", joinColumns = @JoinColumn(name = "id_product"), inverseJoinColumns = @JoinColumn(name = "id_category"))
     public List<Category> getCategories() {
         return categories;

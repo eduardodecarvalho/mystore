@@ -1,42 +1,46 @@
 package com.mystore.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mystore.domain.ClientPhone;
+
 public class ClientPhoneDTO {
 
-    private Integer id;
-    private ClientDTO client;
-    private String phone;
-    private int order;
+    private ClientPhone phone;
 
-    public Integer getId() {
-        return id;
+    public ClientPhoneDTO() {
+        phone = new ClientPhone();
     }
 
-    public void setId(final Integer id) {
-        this.id = id;
-    }
-
-    public ClientDTO getClient() {
-        return client;
-    }
-
-    public void setClient(final ClientDTO client) {
-        this.client = client;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
+    public ClientPhoneDTO(final ClientPhone phone) {
         this.phone = phone;
     }
 
-    public int getOrder() {
-        return order;
+    @JsonIgnore
+    public ClientPhone getClientPhone() {
+        return phone;
     }
 
-    public void setOrder(final int order) {
-        this.order = order;
+    public Integer getId() {
+        return phone.getId();
     }
 
+    public void setId(final Integer id) {
+        phone.setId(id);
+    }
+
+    public String getPhoneNumber() {
+        return phone.getPhoneNumber();
+    }
+
+    public void setPhoneNumber(final String phoneNumber) {
+        phone.setPhoneNumber(phoneNumber);
+    }
+
+    public int getPhoneOrder() {
+        return phone.getPhoneOrder();
+    }
+
+    public void setPhoneOrder(final int phoneOrder) {
+        phone.setPhoneOrder(phoneOrder);
+    }
 }

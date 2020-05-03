@@ -1,5 +1,7 @@
 package com.mystore.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +11,9 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "CITY")
-public class City {
+public class City implements Serializable {
+
+    private static final long serialVersionUID = -7992513801315327729L;
 
     private Integer id;
     @NotBlank

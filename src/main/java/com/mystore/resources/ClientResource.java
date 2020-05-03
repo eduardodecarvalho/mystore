@@ -1,9 +1,7 @@
 package com.mystore.resources;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,22 +24,20 @@ public class ClientResource {
     @Autowired
     private ClientService clientService;
 
-    final ModelMapper modelMapper = new ModelMapper();
-
     @GetMapping
-    public List<ClientDTO> findAll() {
-        return clientService.findAll().stream().map(c -> modelMapper.map(c, ClientDTO.class)).collect(Collectors.toList());
+    public List<Client> findAll() {
+        return clientService.findAll();
     }
 
     @GetMapping("/{id}")
     public ClientDTO findById(@PathVariable final Integer id) {
-        return modelMapper.map(clientService.findById(id), ClientDTO.class);
+        return new ClientDTO(clientService.findById(id));
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Integer create(@RequestBody final ClientDTO clientDTO) {
-        return clientService.create(modelMapper.map(clientDTO, Client.class));
+        return clientService.create(clientDTO.getClient());
     }
 
     @DeleteMapping("/{id}")

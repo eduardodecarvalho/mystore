@@ -1,85 +1,94 @@
 package com.mystore.domain.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ProductDTO implements Serializable {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mystore.domain.Product;
 
-    private static final long serialVersionUID = -6864846849782828445L;
+public class ProductDTO {
 
-    private Integer id;
-    private String sku;
-    private String name;
-    private String description;
-    private String model;
-    private BigDecimal price;
-    private Long quantity;
+    private Product product;
 
-    private List<CategoryNameDTO> categories;
+    public ProductDTO() {
+        product = new Product();
+    }
+
+    public ProductDTO(final Product product) {
+        this.product = product;
+    }
+
+    @JsonIgnore
+    public Product getProduct() {
+        return product;
+    }
 
     public Integer getId() {
-        return id;
+        return product.getId();
     }
 
     public void setId(final Integer id) {
-        this.id = id;
+        product.setId(id);
     }
 
     public String getSku() {
-        return sku;
+        return product.getSku();
     }
 
     public void setSku(final String sku) {
-        this.sku = sku;
+        product.setSku(sku);
     }
 
     public String getName() {
-        return name;
+        return product.getName();
     }
 
     public void setName(final String name) {
-        this.name = name;
+        product.setName(name);
     }
 
     public String getDescription() {
-        return description;
+        return product.getDescription();
     }
 
     public void setDescription(final String description) {
-        this.description = description;
+        product.setDescription(description);
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return product.getPrice();
     }
 
     public void setPrice(final BigDecimal price) {
-        this.price = price;
+        product.setPrice(price);
     }
 
     public Long getQuantity() {
-        return quantity;
+        return product.getQuantity();
     }
 
     public void setQuantity(final Long quantity) {
-        this.quantity = quantity;
+        product.setQuantity(quantity);
     }
 
-    public List<CategoryNameDTO> getCategories() {
-        return categories;
+    public List<CategoryDTO> getCategories() {
+        if (product.getCategories() == null) {
+            return Collections.emptyList();
+        }
+        return product.getCategories().stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
-    public void setCategories(final List<CategoryNameDTO> categories) {
-        this.categories = categories;
+    public void setCategories(final List<CategoryDTO> categories) {
+        product.setCategories(categories.stream().map(CategoryDTO::getCategory).collect(Collectors.toList()));
     }
 
     public String getModel() {
-        return model;
+        return product.getModel();
     }
 
     public void setModel(final String model) {
-        this.model = model;
+        product.setModel(model);
     }
-
 }
