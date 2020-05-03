@@ -1,7 +1,6 @@
 package com.mystore.resources;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,34 +13,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mystore.domain.dto.CategoryDTO;
-import com.mystore.services.CategoryService;
+import com.mystore.domain.Client;
+import com.mystore.domain.dto.ClientDTO;
+import com.mystore.services.ClientService;
 
 @RestController
-@RequestMapping(value = "/categories")
-public class CaterogyResource {
+@RequestMapping(value = "/clients")
+public class ClientResource {
 
     @Autowired
-    private CategoryService categoryService;
+    private ClientService clientService;
 
     @GetMapping
-    public List<CategoryDTO> findAll() {
-        return categoryService.findAll().stream().map(CategoryDTO::new).collect(Collectors.toList());
+    public List<Client> findAll() {
+        return clientService.findAll();
     }
 
     @GetMapping("/{id}")
-    public CategoryDTO findById(@PathVariable final Integer id) {
-        return new CategoryDTO(categoryService.findById(id));
+    public ClientDTO findById(@PathVariable final Integer id) {
+        return new ClientDTO(clientService.findById(id));
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Integer create(@RequestBody final CategoryDTO categoryDTO) {
-        return categoryService.create(categoryDTO.getCategory());
+    public Integer create(@RequestBody final ClientDTO clientDTO) {
+        return clientService.create(clientDTO.getClient());
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable final Integer id) {
-        categoryService.delete(id);
+        clientService.delete(id);
     }
 }

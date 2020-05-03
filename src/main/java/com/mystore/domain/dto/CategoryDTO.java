@@ -1,39 +1,39 @@
 package com.mystore.domain.dto;
 
-import java.io.Serializable;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mystore.domain.Category;
 
-public class CategoryDTO implements Serializable {
+public class CategoryDTO {
 
-    private static final long serialVersionUID = -6611242501590194784L;
+    private Category category;
 
-    private Integer id;
-    private String name;
+    public CategoryDTO() {
+        category = new Category();
+    }
 
-    private List<ProductDTO> products;
+    public CategoryDTO(final Category category) {
+        this.category = category;
+    }
+
+    @JsonIgnore
+    public Category getCategory() {
+        return category;
+    }
 
     public Integer getId() {
-        return id;
+        return category.getId();
     }
 
     public void setId(final Integer id) {
-        this.id = id;
+        category.setId(id);
     }
 
     public String getName() {
-        return name;
+        return category.getName();
     }
 
     public void setName(final String name) {
-        this.name = name;
-    }
-
-    public List<ProductDTO> getProducts() {
-        return products;
-    }
-
-    public void setProducts(final List<ProductDTO> products) {
-        this.products = products;
+        category.setName(name.trim());
     }
 
 }

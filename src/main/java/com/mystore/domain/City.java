@@ -7,23 +7,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "CATEGORY")
-public class Category implements Serializable {
+@Table(name = "CITY")
+public class City implements Serializable {
 
-    private static final long serialVersionUID = 5518000893054734898L;
+    private static final long serialVersionUID = -7992513801315327729L;
 
     private Integer id;
+    @NotBlank
     private String name;
-
-    public Category() {
-    }
-
-    public Category(final Category caterogy) {
-        this.id = caterogy.getId();
-        this.name = caterogy.getName();
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +34,6 @@ public class Category implements Serializable {
     }
 
     public void setName(final String name) {
-        this.name = name.trim();
+        this.name = name;
     }
-
 }

@@ -11,8 +11,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findByCategoriesId(Integer id);
 
-    Optional<Product> findByName(String name);
-
     Optional<Product> findByModel(String name);
+
+    boolean existsByName(String name);
+
+    boolean existsByCategoriesId(Integer id);
 
 }

@@ -19,6 +19,8 @@ public class MyStoreBusinessException extends RuntimeException {
     public static final String PRODUCT_SHOULD_HAVE_A_MODEL = "product_should_have_a_model";
     public static final String PRODUCT_HAVE_QUANTITY = "product_have_quantity";
 
+    public static final String CLIENT_NOT_FOUND = "client_not_found";
+
     public MyStoreBusinessException(final String msg) {
         super(msg);
     }

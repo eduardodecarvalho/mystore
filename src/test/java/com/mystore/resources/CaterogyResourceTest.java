@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mystore.domain.Category;
-import com.mystore.domain.dto.CategoryNameDTO;
+import com.mystore.domain.dto.CategoryDTO;
 import com.mystore.repositories.CaterogyRepository;
 import com.mystore.utils.SpringBootIntegrationTest;
 
@@ -87,7 +87,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
                 "    \"name\": \"IOT\"" +
                 "} ";
 
-        final CategoryNameDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryNameDTO.class);
+        final CategoryDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/categories", categoryDTO, String.class);
         Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
@@ -101,7 +101,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
         final String categoryDTOString = "{" +
                 "    \"name\": \"     \""
                 + "} ";
-        final CategoryNameDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryNameDTO.class);
+        final CategoryDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/categories", categoryDTO, String.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
@@ -111,7 +111,7 @@ public class CaterogyResourceTest extends SpringBootIntegrationTest {
         final String categoryDTOString = "{" +
                 "      \"name\":\"Automotive       \"\n" +
                 "} ";
-        final CategoryNameDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryNameDTO.class);
+        final CategoryDTO categoryDTO = new ObjectMapper().readValue(categoryDTOString, CategoryDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/categories", categoryDTO, String.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
