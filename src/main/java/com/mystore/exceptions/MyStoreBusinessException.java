@@ -21,6 +21,9 @@ public class MyStoreBusinessException extends RuntimeException {
 
     public static final String CLIENT_NOT_FOUND = "client_not_found";
 
+    public static final String EMAIL_ALREDY_REGISTERED = "email_alredy_registered";
+    public static final String NATIONAL_REGISTER_ALREDY_REGISTERED = "national_register_alredy_registered";
+
     public MyStoreBusinessException(final String msg) {
         super(msg);
     }

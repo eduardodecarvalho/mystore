@@ -9,6 +9,10 @@ public class AddressDTO {
 
     private Address address;
 
+    public AddressDTO() {
+        address = new Address();
+    }
+
     public AddressDTO(Address address) {
         this.address = address;
     }

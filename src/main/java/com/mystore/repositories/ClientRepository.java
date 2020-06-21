@@ -6,4 +6,8 @@ import com.mystore.domain.Client;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
 
+    int countByEmail(String email);
+
+    int countByNationalRegister(String nationalRegister);
+
 }

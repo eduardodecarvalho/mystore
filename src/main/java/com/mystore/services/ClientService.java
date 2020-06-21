@@ -15,6 +15,9 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private AddresService addressService;
+
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
@@ -25,6 +28,13 @@ public class ClientService {
     }
 
     public Integer create(final Client client) {
+        if (clientRepository.countByEmail(client.getEmail()) > 0) {
+            throw new MyStoreBusinessException(MyStoreBusinessException.EMAIL_ALREDY_REGISTERED);
+        }
+        if (clientRepository.countByNationalRegister(client.getNationalRegister()) > 0) {
+            throw new MyStoreBusinessException(MyStoreBusinessException.NATIONAL_REGISTER_ALREDY_REGISTERED);
+        }
+        addressService.verifyService(client.getAddresses());
         return clientRepository.save(client).getId();
     }
 
