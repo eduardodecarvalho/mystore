@@ -1,8 +1,8 @@
 package com.mystore.resources;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     @Test
     void findAll() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products", String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "[\n" +
                 "   {\n" +
@@ -83,7 +83,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     @Test
     void findById() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/1", String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "   {\n" +
                 "      \"id\":1,\n" +
@@ -107,7 +107,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     @Test
     void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/99", String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
 
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
-        Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         final Integer createdId = Integer.parseInt(responseEntity.getBody());
         final String actual = new ObjectMapper().writeValueAsString(new Product(productRepository.findById(createdId).get()));
@@ -140,7 +140,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
                 "} ";
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -154,13 +154,13 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
                 "} ";
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
     void findByCategory() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/categories/8", String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "[\n" +
                 "   {\n" +
@@ -207,7 +207,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
         final Integer idToDelete = 3;
         final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/products/" + idToDelete, HttpMethod.DELETE, null,
                 String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertFalse(productRepository.findById(idToDelete).isPresent());
     }
 
@@ -216,6 +216,6 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
         final Integer idToDelete = 1;
         final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/products/" + idToDelete, HttpMethod.DELETE, null,
                 String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 }

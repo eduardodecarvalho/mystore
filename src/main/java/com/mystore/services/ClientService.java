@@ -16,7 +16,7 @@ public class ClientService {
     private ClientRepository clientRepository;
 
     @Autowired
-    private AddresService addressService;
+    private AddressService addressService;
 
     public List<Client> findAll() {
         return clientRepository.findAll();

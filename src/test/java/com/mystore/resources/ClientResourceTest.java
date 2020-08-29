@@ -1,6 +1,7 @@
 package com.mystore.resources;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     @Test
     void findAll() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients", String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "[ " +
                 "   { " +
@@ -119,7 +120,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     @Test
     void findById() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients/1", String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "{ " +
                 "   \"id\":1, " +
@@ -149,7 +150,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     @Test
     void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients/99", String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -162,7 +163,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -175,7 +176,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -189,7 +190,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-        Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         final Integer createdId = Integer.parseInt(responseEntity.getBody());
         final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
@@ -220,7 +221,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-        Assert.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+       assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         final Integer createdId = Integer.parseInt(responseEntity.getBody());
         final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
