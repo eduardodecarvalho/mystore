@@ -2,6 +2,8 @@ package com.mystore.services;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class ClientService {
                 .orElseThrow(() -> new MyStoreBusinessException(MyStoreBusinessException.CLIENT_NOT_FOUND));
     }
 
+    @Transactional
     public Integer create(final Client client) {
         if (clientRepository.countByEmail(client.getEmail()) > 0) {
             throw new MyStoreBusinessException(MyStoreBusinessException.EMAIL_ALREDY_REGISTERED);
@@ -34,7 +37,8 @@ public class ClientService {
         if (clientRepository.countByNationalRegister(client.getNationalRegister()) > 0) {
             throw new MyStoreBusinessException(MyStoreBusinessException.NATIONAL_REGISTER_ALREDY_REGISTERED);
         }
-        addressService.verifyService(client.getAddresses());
+        client.getAddresses().stream().forEach(a -> a.setClient(client));
+        client.getPhones().stream().forEach(p -> p.setClient(client));
         return clientRepository.save(client).getId();
     }
 
@@ -45,4 +49,8 @@ public class ClientService {
 
     }
 
+    public void update(Client client) {
+        Client clientToSave = clientRepository.findById(client.getId()).orElseThrow(() -> new MyStoreBusinessException(MyStoreBusinessException.CLIENT_NOT_FOUND));
+        clientRepository.save(client);
+    }
 }

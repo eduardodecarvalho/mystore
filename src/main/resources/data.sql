@@ -1,4 +1,4 @@
-INSERT INTO CATEGORY (name) VALUES
+ INSERT INTO CATEGORY (name) VALUES
    ('Grocery & Gourmet Foods'),
    ('Arts & Crafts'),
    ('Automotive'),

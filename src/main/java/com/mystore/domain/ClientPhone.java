@@ -3,6 +3,7 @@ package com.mystore.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class ClientPhone implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "id_client")
     public Client getClient() {

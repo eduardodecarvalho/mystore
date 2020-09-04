@@ -2,9 +2,11 @@ package com.mystore.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,9 +24,9 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     private ClientRepository clientRepository;
 
     @Test
-    void findAll() throws Exception {
+    public void findAll() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients", String.class);
-       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "[ " +
                 "   { " +
@@ -118,9 +120,9 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void findById() throws Exception {
+    public void findById() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients/1", String.class);
-       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "{ " +
                 "   \"id\":1, " +
@@ -148,13 +150,13 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
+    public void findByIdNotExistsShouldReturnError() throws JsonMappingException, JsonProcessingException {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients/99", String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void createWithEmailAlredyRegisteredShouldReturnError() throws Exception {
+    public void createWithEmailAlreadyRegisteredShouldReturnError() throws Exception {
         final String clientDTOString = "{ " +
                 "   \"name\":\"Sherlock\", " +
                 "   \"email\":\"sherlock@email.com\", " +
@@ -163,11 +165,11 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void createWithNationalRegisteredAlredyRegisteredShouldReturnError() throws Exception {
+    public void createWithNationalRegisteredAlreadyRegisteredShouldReturnError() throws Exception {
         final String clientDTOString = "{ " +
                 "   \"name\":\"Sherlock\", " +
                 "   \"nationalRegister\":\"12345678910\", " +
@@ -176,11 +178,11 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void create() throws Exception {
+    public void create() throws Exception {
         final String clientDTOString = "{ " +
                 "   \"name\":\"Watson\", " +
                 "   \"email\":\"watson@email.com\", " +
@@ -190,7 +192,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-       assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         final Integer createdId = Integer.parseInt(responseEntity.getBody());
         final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
@@ -198,7 +200,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void createWithAddress() throws Exception {
+    public void createWithAddress() throws Exception {
         final String clientDTOString = "{ " +
                 "   \"name\":\"Watson\", " +
                 "   \"email\":\"watson@email.com\", " +
@@ -221,10 +223,70 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
-       assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         final Integer createdId = Integer.parseInt(responseEntity.getBody());
         final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
         JSONAssert.assertEquals(clientDTOString, actual, false);
     }
+
+    @Test
+    public void createWithCPhones() throws Exception {
+        final String clientDTOString = "{ " +
+                "   \"name\":\"Watson\", " +
+                "   \"email\":\"watson@email.com\", " +
+                "   \"nationalRegister\":\"6547832\", " +
+                "   \"clientType\":\"PERSON\", " +
+                "   \"phones\":[ " +
+                "      { " +
+                "         \"phoneNumber\":\"+55 48 9 9999-9999\", " +
+                "         \"phoneOrder\":1 " +
+                "      } " +
+                "   ] " +
+                "}";
+
+        ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
+        final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+        final Integer createdId = Integer.parseInt(responseEntity.getBody());
+        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
+        JSONAssert.assertEquals(clientDTOString, actual, false);
+    }
+
+    @Test
+    public void updateName() throws Exception {
+        final String clientDTOString = "{ " +
+                "   \"id\":1, " +
+                "   \"name\":\"Sherlock Holmes\", " +
+                "   \"email\":\"sherlock@email.com\", " +
+                "   \"nationalRegister\":\"12345678910\", " +
+                "   \"clientType\":\"PERSON\", " +
+                "   \"addresses\":[ " +
+                "      { " +
+                "         \"id\":1, " +
+                "         \"street\":\"Baker Street\", " +
+                "         \"number\":\"221B\", " +
+                "         \"neighborhood\":\"West End\", " +
+                "         \"zipCode\":\"NW1 6XE\", " +
+                "         \"complement\":\"near Regents Park\", " +
+                "         \"city\":{ " +
+                "            \"id\":1, " +
+                "            \"name\":\"London\" " +
+                "         } " +
+                "      } " +
+                "   ], " +
+                "   \"phones\":[ " +
+                "   ] " +
+                "}";
+
+        ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
+        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/clients/" + clientDTO.getId(), HttpMethod.PUT, new HttpEntity<>(clientDTO),
+                String.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        final String expected = new ObjectMapper().writeValueAsString(clientRepository.findById(clientDTO.getId()).get());
+        JSONAssert.assertEquals(expected, clientDTOString, false);
+    }
+
 }

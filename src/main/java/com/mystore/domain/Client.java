@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mystore.domain.enums.ClientType;
 
 @Entity
@@ -84,8 +84,7 @@ public class Client implements Serializable {
         this.clientType = clientType;
     }
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -94,8 +93,7 @@ public class Client implements Serializable {
         this.addresses = addresses;
     }
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<ClientPhone> getPhones() {
         return phones;
     }

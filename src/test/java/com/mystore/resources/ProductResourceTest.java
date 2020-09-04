@@ -3,7 +3,7 @@ package com.mystore.resources;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -24,9 +24,9 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     private ProductRepository productRepository;
 
     @Test
-    void findAll() throws Exception {
+    public void findAll() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products", String.class);
-       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "[\n" +
                 "   {\n" +
@@ -81,9 +81,9 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void findById() throws Exception {
+    public void findById() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/1", String.class);
-       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "   {\n" +
                 "      \"id\":1,\n" +
@@ -105,13 +105,13 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
+    public void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/99", String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void create() throws Exception {
+    public void create() throws Exception {
         final String productDTOString = "{" +
                 "    \"name\": \"IOT\"," +
                 "    \"sku\": \"IOT\"," +
@@ -122,7 +122,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
 
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
-       assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         final Integer createdId = Integer.parseInt(responseEntity.getBody());
         final String actual = new ObjectMapper().writeValueAsString(new Product(productRepository.findById(createdId).get()));
@@ -130,7 +130,7 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void createWithNameWithJustSpacesShouldReturnError() throws Exception {
+    public void createWithNameWithJustSpacesShouldReturnError() throws Exception {
         final String productDTOString = "{" +
                 "    \"name\": \"     \"," +
                 "    \"sku\": \"IOT\"," +
@@ -140,11 +140,11 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
                 "} ";
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void createWithDuplicatedNameShouldReturnError() throws Exception {
+    public void createWithDuplicatedNameShouldReturnError() throws Exception {
         final String productDTOString = "{" +
                 "    \"name\": \"Kindle\"," +
                 "    \"sku\": \"IOT\"," +
@@ -154,13 +154,13 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
                 "} ";
         final ProductDTO productDTO = new ObjectMapper().readValue(productDTOString, ProductDTO.class);
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/products", productDTO, String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void findByCategory() throws Exception {
+    public void findByCategory() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/products/categories/8", String.class);
-       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         final String expected = "[\n" +
                 "   {\n" +
@@ -203,19 +203,19 @@ public class ProductResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void deleteById() {
+    public void deleteById() {
         final Integer idToDelete = 3;
         final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/products/" + idToDelete, HttpMethod.DELETE, null,
                 String.class);
-       assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertFalse(productRepository.findById(idToDelete).isPresent());
     }
 
     @Test
-    void deleteByIdWithQuantityShouldReturnError() {
+    public void deleteByIdWithQuantityShouldReturnError() {
         final Integer idToDelete = 1;
         final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/products/" + idToDelete, HttpMethod.DELETE, null,
                 String.class);
-       assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 }

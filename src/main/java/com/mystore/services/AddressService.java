@@ -1,15 +1,14 @@
 package com.mystore.services;
 
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mystore.domain.Address;
+import com.mystore.repositories.AddressRepository;
 
 @Service
 public class AddressService {
 
-    public void verifyService(List<Address> addresses) {
+    @Autowired
+    private AddressRepository addressRepository;
 
-    }
 }

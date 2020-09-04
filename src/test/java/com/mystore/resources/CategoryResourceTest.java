@@ -3,7 +3,7 @@ package com.mystore.resources;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -24,7 +24,7 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     private CaterogyRepository categoryRepository;
 
     @Test
-    void findAll() throws Exception {
+    public void findAll() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/categories", String.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
@@ -66,7 +66,7 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void findById() throws Exception {
+    public void findById() throws Exception {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/categories/1", String.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
@@ -76,13 +76,13 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
+    public void findByIdNotExistsShouldRetornError() throws JsonMappingException, JsonProcessingException {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/categories/99", String.class);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
-    void create() throws Exception {
+    public void create() throws Exception {
         final String categoryDTOString = "{" +
                 "    \"name\": \"IOT\"" +
                 "} ";
@@ -97,7 +97,7 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void createWithNameWithJustSpacesShouldReturnError() throws Exception {
+    public void createWithNameWithJustSpacesShouldReturnError() throws Exception {
         final String categoryDTOString = "{" +
                 "    \"name\": \"     \""
                 + "} ";
@@ -107,7 +107,7 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void createWithDuplicatedNameShouldReturnError() throws Exception {
+    public void createWithDuplicatedNameShouldReturnError() throws Exception {
         final String categoryDTOString = "{" +
                 "      \"name\":\"Automotive       \"\n" +
                 "} ";
@@ -117,7 +117,7 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void deleteById() {
+    public void deleteById() {
         final Integer idToDelete = 1;
         final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/categories/" + idToDelete, HttpMethod.DELETE, null,
                 String.class);
@@ -126,7 +126,7 @@ public class CategoryResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    void deleteByIdWithProductsShouldReturnError() {
+    public void deleteByIdWithProductsShouldReturnError() {
         final Integer idToDelete = 8;
         final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/categories/" + idToDelete, HttpMethod.DELETE, null,
                 String.class);
