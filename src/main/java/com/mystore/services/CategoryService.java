@@ -1,24 +1,25 @@
 package com.mystore.services;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.mystore.domain.Category;
 import com.mystore.exceptions.MyStoreBusinessException;
 import com.mystore.repositories.CaterogyRepository;
 import com.mystore.repositories.ProductRepository;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
 
-    @Autowired
-    private CaterogyRepository categoryRepository;
+    private final CaterogyRepository categoryRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    public CategoryService(CaterogyRepository categoryRepository, ProductRepository productRepository) {
+        this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
+    }
 
     public List<Category> findAll() {
         return categoryRepository.findAll();

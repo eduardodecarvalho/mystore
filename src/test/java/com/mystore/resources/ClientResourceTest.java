@@ -1,7 +1,10 @@
 package com.mystore.resources;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mystore.domain.Client;
+import com.mystore.domain.dto.ClientDTO;
+import com.mystore.repositories.ClientRepository;
+import com.mystore.utils.SpringBootIntegrationTest;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +13,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mystore.domain.Client;
-import com.mystore.domain.dto.ClientDTO;
-import com.mystore.repositories.ClientRepository;
-import com.mystore.utils.SpringBootIntegrationTest;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClientResourceTest extends SpringBootIntegrationTest {
 
@@ -150,7 +149,7 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void findByIdNotExistsShouldReturnError() throws JsonMappingException, JsonProcessingException {
+    public void findByIdNotExistsShouldReturnError() {
         final ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:" + port + "/clients/99", String.class);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
@@ -194,8 +193,8 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
-        final Integer createdId = Integer.parseInt(responseEntity.getBody());
-        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
+        final Integer createdId = Integer.parseInt(Objects.requireNonNull(responseEntity.getBody()));
+        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).orElse(new Client())));
         JSONAssert.assertEquals(clientDTOString, actual, false);
     }
 
@@ -225,8 +224,8 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
-        final Integer createdId = Integer.parseInt(responseEntity.getBody());
-        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
+        final Integer createdId = Integer.parseInt(Objects.requireNonNull(responseEntity.getBody()));
+        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).orElse(new Client())));
         JSONAssert.assertEquals(clientDTOString, actual, false);
     }
 
@@ -249,8 +248,8 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
         final ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://localhost:" + port + "/clients", clientDTO, String.class);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
-        final Integer createdId = Integer.parseInt(responseEntity.getBody());
-        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).get()));
+        final Integer createdId = Integer.parseInt(Objects.requireNonNull(responseEntity.getBody()));
+        final String actual = new ObjectMapper().writeValueAsString(new Client(clientRepository.findById(createdId).orElse(new Client())));
         JSONAssert.assertEquals(clientDTOString, actual, false);
     }
 
@@ -281,11 +280,12 @@ public class ClientResourceTest extends SpringBootIntegrationTest {
                 "}";
 
         ClientDTO clientDTO = new ObjectMapper().readValue(clientDTOString, ClientDTO.class);
-        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/clients/" + clientDTO.getId(), HttpMethod.PUT, new HttpEntity<>(clientDTO),
+        Integer id = clientDTO.getId();
+        final ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:" + port + "/clients/" + id, HttpMethod.PUT, new HttpEntity<>(clientDTO),
                 String.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        final String expected = new ObjectMapper().writeValueAsString(clientRepository.findById(clientDTO.getId()).get());
+        final String expected = new ObjectMapper().writeValueAsString(clientRepository.findById(id).orElse(new Client()));
         JSONAssert.assertEquals(expected, clientDTOString, false);
     }
 

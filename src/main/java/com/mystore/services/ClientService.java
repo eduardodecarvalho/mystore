@@ -1,24 +1,21 @@
 package com.mystore.services;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.mystore.domain.Client;
 import com.mystore.exceptions.MyStoreBusinessException;
 import com.mystore.repositories.ClientRepository;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-    @Autowired
-    private AddressService addressService;
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     public List<Client> findAll() {
         return clientRepository.findAll();
@@ -37,8 +34,8 @@ public class ClientService {
         if (clientRepository.countByNationalRegister(client.getNationalRegister()) > 0) {
             throw new MyStoreBusinessException(MyStoreBusinessException.NATIONAL_REGISTER_ALREDY_REGISTERED);
         }
-        client.getAddresses().stream().forEach(a -> a.setClient(client));
-        client.getPhones().stream().forEach(p -> p.setClient(client));
+        client.getAddresses().forEach(a -> a.setClient(client));
+        client.getPhones().forEach(p -> p.setClient(client));
         return clientRepository.save(client).getId();
     }
 
@@ -49,8 +46,12 @@ public class ClientService {
 
     }
 
-    public void update(Client client) {
-        Client clientToSave = clientRepository.findById(client.getId()).orElseThrow(() -> new MyStoreBusinessException(MyStoreBusinessException.CLIENT_NOT_FOUND));
-        clientRepository.save(client);
+    public Integer update(final Integer id, final Client client) {
+        if (clientRepository.existsById(id)) {
+            client.getAddresses().forEach(a -> a.setClient(client));
+            client.getPhones().forEach(p -> p.setClient(client));
+            return clientRepository.save(client).getId();
+        }
+        throw new MyStoreBusinessException(MyStoreBusinessException.CLIENT_NOT_FOUND);
     }
 }

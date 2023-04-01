@@ -1,29 +1,22 @@
 package com.mystore.resources;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.mystore.domain.dto.ClientDTO;
 import com.mystore.services.ClientService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/clients")
 public class ClientResource {
 
-    @Autowired
-    private ClientService clientService;
+    private final ClientService clientService;
+
+    public ClientResource(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @GetMapping
     public List<ClientDTO> findAll() {
@@ -47,7 +40,7 @@ public class ClientResource {
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestBody final ClientDTO clientDTO) {
-        clientService.update(clientDTO.getClient());
+    public Integer update(@PathVariable final Integer id, @RequestBody final ClientDTO clientDTO) {
+        return clientService.update(id, clientDTO.getClient());
     }
 }
